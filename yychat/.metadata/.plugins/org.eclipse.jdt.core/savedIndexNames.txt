@@ -1,23 +1,4 @@
-INDEX VERSION 1.127+D:\yychat\制作登录\.metadata\.plugins\org.eclipse.jdt.core
-2062304755.index
-3970514108.index
-482295326.index
-653601977.index
-1893186617.index
-3705527150.index
-526349334.index
+INDEX VERSION 1.127+G:\制作登录\.metadata\.plugins\org.eclipse.jdt.core
 1384277974.index
-2956606681.index
-577864626.index
-3282809907.index
-658985889.index
-2692503955.index
-2938227264.index
-632545659.index
-3130914090.index
+2062304755.index
 2512823978.index
-494326451.index
-2918853047.index
-3703910499.index
-2439553500.index
-1076101677.index

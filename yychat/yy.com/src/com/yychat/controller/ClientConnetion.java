@@ -24,6 +24,25 @@ public class ClientConnetion {
 	}//本机地址，回测地址
 	
 }
+	public boolean registerUserIntoDB(User user){
+		boolean registerSuccess=false;
+		ObjectOutputStream oos;
+		Message mess=null;
+	    try {
+			oos=new ObjectOutputStream(s.getOutputStream());//获得字节输出流对象
+		    oos.writeObject(user);
+		    
+		    ObjectInputStream ois=new ObjectInputStream(s.getInputStream());
+		    mess=(Message)ois.readObject();
+		    if(mess.getMessageType().equals(mess.message_registerSuccess)){
+		    	registerSuccess=true;
+		    	s.close();
+		    }
+	    } catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return registerSuccess;
+	}
 	public Message loginValidate(User user){
 		//对象的输入输出流
 		ObjectOutputStream oos;

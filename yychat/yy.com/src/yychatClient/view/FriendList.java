@@ -23,6 +23,7 @@ public class FriendList extends JFrame implements ActionListener,MouseListener
     public static HashMap hmFriendChat1=new HashMap<String,FriendChat1>();
 	
     
+    
 	//成员变量
 	CardLayout cardLayout;
 	//第一个卡片
@@ -35,6 +36,7 @@ public class FriendList extends JFrame implements ActionListener,MouseListener
 	JPanel myStrangerBlackList;
 	JButton myStrangerButton;
 	JButton BlackListButton;
+	JButton jb1; 
 	
 	//第二个卡片
 	JPanel StrangerBlackJPanel;
@@ -54,6 +56,7 @@ public class FriendList extends JFrame implements ActionListener,MouseListener
 	JLabel[] myFriendLabel=new JLabel[MYFRIENDCOUNT];//对象数组
 	public FriendList(String userName,String friendString){
 		this.userName= userName;
+		//第一个卡片
 		myFriendPanel=new JPanel(new BorderLayout());//边界布局
 		//System.out.println(myFriendPanel.getLayout());
 		myFriendButton=new JButton("我的好友");
@@ -104,11 +107,13 @@ public class FriendList extends JFrame implements ActionListener,MouseListener
 		StrangerBlack.add(myStrangerButton1);
 		StrangerBlackJPanel.add(StrangerBlack,"North");
 		
+		jb1=new JButton("添加好友");
+		jb1.addActionListener(this);
 		cardLayout=new CardLayout();
 		this.setLayout(cardLayout);
 		this.add(myFriendPanel,"1");
 		this.add(StrangerBlackJPanel,"2");
-		
+		this.add(jb1,"South");
 		
 		this.setSize(200, 500);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -170,7 +175,7 @@ public class FriendList extends JFrame implements ActionListener,MouseListener
     	String[] friendName=onlineFriend.split(" ");
     	int count=friendName.length;
     	for(int i=0;i<count;i++){
-    		myFriendLabel[Integer.parseInt(friendName[i])].setEnabled(true);
+    		//myFriendLabel[Integer.parseInt(friendName[i])].setEnabled(true);
     	}
     	//激活新登录好友图标
     	Message mess=new Message();

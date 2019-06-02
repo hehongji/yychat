@@ -58,6 +58,7 @@ public class ClientLogin extends JFrame implements ActionListener {//类名，继承
 		jb1=new JButton(new ImageIcon("images/denglu.gif"));
 		jb1.addActionListener(this);
 		jb2=new JButton(new ImageIcon("images/zhuce.gif"));
+		jb2.addActionListener(this);
 		jb3=new JButton(new ImageIcon("images/quxiao.gif"));
 		jpl1=new JPanel();
 		jpl1.add(jb1);jpl1.add(jb2);jpl1.add(jb3);
@@ -79,12 +80,27 @@ public class ClientLogin extends JFrame implements ActionListener {//类名，继承
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+		if(arg0.getSource()==jb2){
+			String userName=jtf1.getText();
+			String passWord=new String(jpf1.getPassword());
+			User user=new User();
+			user.setUserName(userName);
+			user.setPassWord(passWord);
+			user.setUserMessageType("USER_REGISTER");
+			boolean registerSuccess=new ClientConnetion().registerUserIntoDB(user);
+			if(registerSuccess){
+				JOptionPane.showMessageDialog(this,"注册成功");
+			}else{
+				JOptionPane.showMessageDialog(this,"用户已存在，注册失败");
+			}
+		}
 		if(arg0.getSource()==jb1){
 			String userName=jtf1.getText();
 			String passWord=new String(jpf1.getPassword());
 			User user=new User();
 			user.setUserName(userName);
 			user.setPassWord(passWord);
+			user.setUserMessageType("USER_LOGIN");
 			//密码验证，密码是123456验证成功，否则验证失败
 			
 			

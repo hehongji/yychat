@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 
 public class YychatDbUtil {
    public static final String MYSQLDRIVER="com.mysql.jdbc.Driver";
@@ -30,7 +31,56 @@ public class YychatDbUtil {
 	}
        return conn;
    }
+	public static void addUser(String userName,String passWord){
+		Connection conn=getConnection();
+		   //3.建立一个preparedStatement
+			String user_Add_Sql="insert into user(username,password,registertimestamp) values(?,?,?) ";
+			PreparedStatement ptmt=null;
+			try {
+				ptmt = conn.prepareStatement(user_Add_Sql);
+				ptmt.setString(1, userName);
+				ptmt.setString(2, passWord);
+				Date date=new Date();
+				java.sql.Timestamp timestamp=new java.sql.Timestamp(date.getTime());
+				ptmt.setTimestamp(3, timestamp);
+				//4.执行preparedStatment
+				ptmt.executeUpdate();
+				
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}finally{
+				closeDB(conn,ptmt);
+			}
+		  
+	   }
+	   
 	
+   
+   public static boolean seekUser(String userName){
+	   boolean seekSuccess=false;
+	   ResultSet rs=null;
+	   Connection conn=getConnection();
+	   //3.建立一个preparedStatement
+		String user_Register_Sql="select * from user where username=?";
+		PreparedStatement ptmt=null;
+		try {
+			ptmt = conn.prepareStatement(user_Register_Sql);
+			ptmt.setString(1, userName);
+			
+			//4.执行preparedStatment
+			rs=ptmt.executeQuery();
+			
+			//5.判断结果集
+			seekSuccess=rs.next();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			closeDB(conn,ptmt,rs);
+		}
+	   return seekSuccess;
+   }
+   
    public static boolean loginValidate(String userName,String passWord){
 	   boolean loginSuccess=false; 
 	   ResultSet rs=null;
@@ -76,6 +126,24 @@ public class YychatDbUtil {
 		return friendString;
    }
   
+   public static void closeDB( Connection conn,PreparedStatement ptmt){
+	   if(conn!=null){
+		 try {
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}   
+	   }
+	   
+	   if(ptmt!=null){
+			 try {
+				ptmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}   
+		   }
+	  
+   }
    
    public static void closeDB( Connection conn,PreparedStatement ptmt,ResultSet rs){
 	   if(conn!=null){

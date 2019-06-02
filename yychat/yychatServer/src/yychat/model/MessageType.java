@@ -8,5 +8,7 @@ public interface MessageType {
     String message_OnlineFriend="4";
     String message_UpnewFriend="5";
     String message_upOnlineFriend="6";
+    String message_registerSuccess="7";
+    String message_registerFailuer="8";
 
 }

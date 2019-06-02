@@ -41,36 +41,56 @@ public class StartServer {
 			System.out.println(user.getUserName());
 			System.out.println(user.getPassWord());
 			
-			//使用数据库来验证用户和密码
-		    boolean loginSuccess=YychatDbUtil.loginValidate(userName, passWord);
-
-			Message mess=new Message();
-			mess.setSender("sender");
-			mess.setReceiver(user.getUserName());
-			//mess.setContent(content);
-			if(loginSuccess){//不能用“==”，对象比较
-				
-				//消息传递，创建一个Message对象
-				
-				mess.setMessageType("1");//验证通过
-				
-				String friendString=YychatDbUtil.getFriendString(userName);
-				mess.setContent(friendString);
-				System.out.println(userName+"的全部好友："+friendString);
-				
-				//保存每一个用户对应的Socket
-				hmSocket .put(userName, s);
-				
-				//如何接受客户端聊天信息？另建一个线程来接收
-				new ServerReceiverThread(s,hmSocket).start();
 			
+			
+			if(user.getUserMessageType().equals("USER_REGISTER")){
+				Message mess=new Message();
+				mess.setSender("sender");
+				mess.setReceiver(user.getUserName());
+				boolean seekSuccess=YychatDbUtil.seekUser(userName);
+				if(seekSuccess){
+					mess.setMessageType(Message.message_registerFailuer);
+				}else{
+					YychatDbUtil.addUser(userName,passWord);
+					mess.setMessageType(Message.message_registerSuccess);
+				}
+				sendMessage(s,mess);
+	            s.close();
+				
 			}
-			else{
-				mess.setMessageType("0");//验证不通过
-			}
-			sendMessage(s,mess);
+			if(user.getUserMessageType().equals("USER_LOGIN")){
+				//mess.setContent(content);
+				//使用数据库来验证用户和密码Message mess=new Message();
+				Message mess=new Message();
+				mess.setSender("sender");
+				mess.setReceiver(user.getUserName());
+			    boolean loginSuccess=YychatDbUtil.loginValidate(userName, passWord);
 
+				if(loginSuccess){//不能用“==”，对象比较
+					
+					//消息传递，创建一个Message对象
+					
+					mess.setMessageType("1");//验证通过
+					
+					String friendString=YychatDbUtil.getFriendString(userName);
+					mess.setContent(friendString);
+					System.out.println(userName+"的全部好友："+friendString);
+					
+					//保存每一个用户对应的Socket
+					hmSocket .put(userName, s);
+					
+					//如何接受客户端聊天信息？另建一个线程来接收
+					new ServerReceiverThread(s,hmSocket).start();
+				
+				}
+				else{
+					mess.setMessageType("0");//验证不通过
+				}
+				sendMessage(s,mess);
+
+				}
 			}
+			
 		} catch (IOException | ClassNotFoundException  e) {
 			e.printStackTrace();
 		}
